@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS "users"
     "profile_picture_url" VARCHAR(255),
     "birth_date" VARCHAR(255),
     "date_created" TIMESTAMP NOT NULL DEFAULT NOW(),
-    "about" VARCHAR(255),
+    "about" VARCHAR(255) NOT NULL,
+    "role" INTEGER NOT NULL DEFAULT 0,
     "is_verified" BOOLEAN NOT NULL DEFAULT false
 );
 
