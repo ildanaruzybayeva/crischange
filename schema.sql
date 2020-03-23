@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS "users"
     "first_name" VARCHAR(255) NOT NULL,
     "last_name" VARCHAR(255) NOT NULL,
     "gender" VARCHAR(255) NOT NULL,
-    "postal_code" INTEGER (10) NOT NULL,
+    "postal_code" INTEGER NOT NULL,
     "city" VARCHAR(255) NOT NULL,
     "country" VARCHAR(255) NOT NULL,
     "profile_picture_url" VARCHAR(255),
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS "posts"
     "id" SERIAL PRIMARY KEY,
     "user_id" INTEGER REFERENCES users(id) NOT NULL,
     "caption"  VARCHAR(255) NOT NULL,
-    "location" INTEGER REFERENCES users(postal_code) NOT NULL,
+    "location" INTEGER REFERENCES users(id) NOT NULL,
     "date_created" TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
