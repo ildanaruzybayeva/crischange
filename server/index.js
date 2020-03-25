@@ -12,19 +12,20 @@ const { query } = require('./schemas/query');
 const client = new Client()
 client.connect()
 
+app.use(cors())
+
 const schema = new GraphQLSchema({
   query
 });
 
 app.use(
-  '/',
+  '/graphql',
   expressGraphQl({
     schema: schema,
     graphiql: true
   })
 );
 
-app.use(cors())
 
 app.get("/", async (request, reply) => {
   const sql = "SELECT * FROM users";
@@ -40,12 +41,12 @@ app.get("/users/:email", async (request, reply) => {
 });
 
 
-app.post("/users/:email", async (request, reply) => {
-  const sql = "INSERT INTO profiles_fields (name, value) VALUES ($1, $2) WHERE email=$1;";
-  const values = [request.body.name, request.body.value];
-  const result = await client.query(sql, values);
-  reply.send(result);
-});
+// app.post("/users/:email", async (request, reply) => {
+//   const sql = "INSERT INTO profiles_fields (name, value) VALUES ($1, $2) WHERE email=$1;";
+//   const values = [request.body.name, request.body.value, request.params.email];
+//   const result = await client.query(sql, values);
+//   reply.send(result);
+// });
 
 
 
