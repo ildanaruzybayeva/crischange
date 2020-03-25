@@ -31,7 +31,7 @@ const ProfileType = new GraphQLObjectType({
     city: { type: GraphQLString },
     country: { type: GraphQLString }
   }),
-   resolve: async (parentValue, args) => {
+  resolve: async (parentValue, args) => {
     const sql = "SELECT * FROM profiles"
     const result = await client.query(sql)
     return result.rows
