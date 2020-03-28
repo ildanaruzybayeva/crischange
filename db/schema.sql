@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS "profiles";
 CREATE TABLE IF NOT EXISTS "profiles" 
 (
     "user_id" INTEGER REFERENCES users(id) NOT NULL PRIMARY KEY,
-    "birth_date" TIMESTAMP CHECK (date_part('year', AGE(birth_date)) >= 13),
+    "birth_date" TIMESTAMP CHECK (date_part('year', age(birth_date)) >= 13),
     "postal_code" INTEGER NOT NULL,
     "city" VARCHAR(255) NOT NULL,
     "country" VARCHAR(255) NOT NULL
@@ -30,10 +30,10 @@ CREATE TABLE IF NOT EXISTS "admins"
 DROP TABLE IF EXISTS "profiles_fields";
 CREATE TABLE IF NOT EXISTS "profiles_fields"
 (
-    "id" SERIAL PRIMARY KEY,
     "user_id" INTEGER REFERENCES users(id) NOT NULL,
     "name" VARCHAR(255) NOT NULL,
-    "value" JSON NOT NULL
+    "value" JSON NOT NULL,
+    PRIMARY KEY ("user_id", "name")
 );
 
 DROP TABLE IF EXISTS "posts";
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS "posts"
 (
     "id" SERIAL PRIMARY KEY,
     "user_id" INTEGER REFERENCES users(id) NOT NULL,
-    "content"  text CHECK (char_length(content) <= 255) NOT NULL,
+    "content"  TEXT CHECK (char_length(content) <= 255) NOT NULL,
     "is_available" BOOLEAN DEFAULT true,
     "created_at" TIMESTAMPTZ DEFAULT NOW() NOT NULL,
     "updated_at" TIMESTAMPTZ DEFAULT NOW() NOT NULL
