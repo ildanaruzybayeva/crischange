@@ -30,10 +30,10 @@ CREATE TABLE IF NOT EXISTS "admins"
 DROP TABLE IF EXISTS "profiles_fields";
 CREATE TABLE IF NOT EXISTS "profiles_fields"
 (
-    "id" SERIAL PRIMARY KEY,
     "user_id" INTEGER REFERENCES users(id) NOT NULL,
     "name" VARCHAR(255) NOT NULL,
-    "value" JSON NOT NULL
+    "value" JSON NOT NULL,
+    PRIMARY KEY ("user_id", "name")
 );
 
 DROP TABLE IF EXISTS "posts";

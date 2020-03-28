@@ -1,5 +1,5 @@
 const graphql = require("graphql");
-const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQL, GraphQLList, GraphQLID } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLID } = graphql;
 const { Client } = require('pg')
 
 const client = new Client()
@@ -15,12 +15,8 @@ const UserType = new GraphQLObjectType({
     password: { type: GraphQLString },
     created_at: { type: GraphQLString },
     updated_at: { type: GraphQLString },
-    profiles: { 
-        type: new GraphQLList(ProfileType)
-    },
-    profiles_fields: {
-        type: new GraphQLList(ProfileFieldsType)
-    }
+    profiles: { type: ProfileType },
+    profiles_fields: { type: ProfileFieldsType }
   })
 });
 
@@ -34,11 +30,6 @@ const ProfileType = new GraphQLObjectType({
     city: { type: GraphQLString },
     country: { type: GraphQLString }
   }),
-//   resolve: async (parentValue, args) => {
-//     const sql = "SELECT * FROM profiles"
-//     const result = await client.query(sql)
-//     return result.rows
-//     }
 });
 
 
