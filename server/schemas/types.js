@@ -6,10 +6,7 @@ const {
     GraphQLID,
     GraphQLList,
 } = graphql;
-const { Client } = require('pg');
-
-const client = new Client();
-client.connect();
+const client = require('../db');
 
 const UserType = new GraphQLObjectType({
     name: 'User',
