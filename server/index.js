@@ -1,18 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-const { Client } = require('pg');
 const graphql = require('graphql');
 const expressGraphQl = require('express-graphql');
 const { query } = require('./schemas/query');
 const bodyParser = require('body-parser');
 //const { mutation } = require("./schemas/mutations");
-
-/**
- * SETUP DB CONNECTION
- */
-
-const client = new Client();
-client.connect();
+const client = require('./db');
 
 /**
  * SETUP EXPRESS SERVER
@@ -65,12 +58,12 @@ app.get('/users/:email', async (req, res) => {
     }
 });
 
-app.post('/user/:email', async (req, res) => {
+app.post('/users/:email', async (req, res) => {
     try {
         const sql1 = `
             SELECT * FROM users 
             WHERE email = $1
-        `;
+            `;
         const values1 = [req.params.email];
         const result1 = await client.query(sql1, values1);
 
@@ -110,4 +103,4 @@ app.use(
     }),
 );
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`The app is listening on port ${port}!`));
