@@ -79,3 +79,8 @@ CREATE TABLE IF NOT EXISTS "messages"
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY ("from", "to", "created_at")
 );
+
+--dropview
+CREATE VIEW profile AS
+SELECT id, email, created_at, updated_at AS users
+FROM users;
