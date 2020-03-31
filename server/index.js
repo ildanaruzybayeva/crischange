@@ -30,39 +30,47 @@ app.use(
 app.use(bodyParser.json());
 
 app.get('/', async (req, res) => {
-    const sql = 'SELECT * FROM users';
-    const result = await client.query(sql);
-    res.send(result.rows);
+    try {
+        const sql = 'SELECT * FROM profile';
+        const result = await client.query(sql);
+        res.send(result.rows);
+    } catch (err) {
+        res.status(404).json('Page not found');
+    }
 });
 
 app.get('/users/:email', async (req, res) => {
-    const sql1 = `
-    SELECT * FROM users 
-    JOIN profiles ON users.id = profiles.user_id 
-    WHERE users.email = $1;
-  `;
-    const values1 = [req.params.email];
-    const result1 = await client.query(sql1, values1);
+    try {
+        const sql1 = `
+            SELECT * FROM profile 
+            JOIN profiles ON profile.id = profiles.user_id 
+            WHERE profile.email = $1;
+        `;
+        const values1 = [req.params.email];
+        const result1 = await client.query(sql1, values1);
 
-    const sql2 = `
-    SELECT * FROM profiles_fields 
-    WHERE user_id = $1 
-  `;
-    const values2 = [result1.rows[0].user_id];
-    const result2 = await client.query(sql2, values2);
+        const sql2 = `
+            SELECT * FROM profiles_fields 
+            WHERE user_id = $1 
+        `;
+        const values2 = [result1.rows[0].user_id];
+        const result2 = await client.query(sql2, values2);
 
-    const reducer = (acc, curr) => ({ ...acc, [curr.name]: curr.value });
-    const res2Object = result2.rows.reduce(reducer, {});
+        const reducer = (acc, curr) => ({ ...acc, [curr.name]: curr.value });
+        const res2Object = result2.rows.reduce(reducer, {});
 
-    res.send({ ...result1.rows[0], ...res2Object });
+        res.send({ ...result1.rows[0], ...res2Object });
+    } catch (err) {
+        res.status(404).json('Error, user not found');
+    }
 });
 
 app.post('/user/:email', async (req, res) => {
     try {
         const sql1 = `
-    SELECT * FROM users 
-    WHERE email = $1
-  `;
+            SELECT * FROM users 
+            WHERE email = $1
+        `;
         const values1 = [req.params.email];
         const result1 = await client.query(sql1, values1);
 
@@ -70,11 +78,11 @@ app.post('/user/:email', async (req, res) => {
             typeof req.body.value === 'string' ? `to_json($3::text)` : `$3`;
 
         const sql = `
-    INSERT INTO "profiles_fields" ("user_id", "name", "value")
-    VALUES ($1, $2, ${par3})
-    ON CONFLICT ON CONSTRAINT profiles_fields_pkey
-    DO UPDATE SET
-    value = EXCLUDED.value;`;
+            INSERT INTO "profiles_fields" ("user_id", "name", "value")
+            VALUES ($1, $2, ${par3})
+            ON CONFLICT ON CONSTRAINT profiles_fields_pkey
+            DO UPDATE SET
+            value = EXCLUDED.value;`;
 
         const values2 = [result1.rows[0].id, req.body.name, req.body.value];
         const result2 = await client.query(sql, values2);
