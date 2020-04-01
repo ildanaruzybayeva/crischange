@@ -5,3 +5,9 @@ ports:
     onOpen: ignore
   - port: 5432
     onOpen: ignore
+
+tasks:
+  - name: server
+    before: cd server
+    init: yarn install
+    command: yarn start
