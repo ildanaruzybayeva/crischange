@@ -18,7 +18,7 @@ const RootQuery = new GraphQLObjectType({
                 const sql = `SELECT * FROM users WHERE email = $1`;
                 const values = [args.email];
                 const result = await client.query(sql, values);
-                console.log(result.rows);
+                //console.log(result.rows);
                 return result.rows[0];
             },
         },
@@ -28,7 +28,8 @@ const RootQuery = new GraphQLObjectType({
             resolve: async (parentValue, args) => {
                 const sql = 'SELECT * FROM profiles WHERE user_id = $1';
                 const values = [args.user_id];
-                const result = await client.query(sql);
+                const result = await client.query(sql, values);
+                console.log(result.rows);
                 return result.rows;
             },
         },
