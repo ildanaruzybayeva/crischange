@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS "messages"
 );
 
 --dropview
-CREATE VIEW profile AS
-SELECT id, email, created_at, updated_at AS users
-FROM users;
+DROP VIEW IF EXISTS "users_public";
+CREATE VIEW "users_public" AS
+SELECT "id", "email", "created_at", "updated_at" 
+FROM "users";

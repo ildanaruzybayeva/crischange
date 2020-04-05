@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 
 app.get('/', async (req, res) => {
     try {
-        const sql = 'SELECT * FROM profile';
+        const sql = 'SELECT * FROM users_public';
         const result = await client.query(sql);
         res.send(result.rows);
     } catch (err) {
@@ -35,9 +35,9 @@ app.get('/', async (req, res) => {
 app.get('/users/:email', async (req, res) => {
     try {
         const sql1 = `
-            SELECT * FROM profile 
-            JOIN profiles ON profile.id = profiles.user_id 
-            WHERE profile.email = $1;
+            SELECT * FROM users_public 
+            JOIN profiles ON users_public.id = profiles.user_id 
+            WHERE users_public.email = $1;
         `;
         const values1 = [req.params.email];
         const result1 = await client.query(sql1, values1);
@@ -54,6 +54,7 @@ app.get('/users/:email', async (req, res) => {
 
         res.send({ ...result1.rows[0], ...res2Object });
     } catch (err) {
+        console.log(err);
         res.status(404).json('Error, user not found');
     }
 });
