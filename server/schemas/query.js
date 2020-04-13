@@ -30,6 +30,7 @@ const RootQuery = new GraphQLObjectType({
                 const values = [args.user_id];
                 const result = await client.query(sql, values);
                 console.log(result.rows);
+                console.log('this is feature 69');
                 return result.rows;
             },
         },
